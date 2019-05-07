@@ -1,0 +1,26 @@
+{
+  "name": "@cisl/celio-speaker",
+  "version": "0.5.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "contributors": [
+    {
+      "name": "Matthew Peveler",
+      "email": "pevelm@rpi.edu"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://internal.cisl.rpi.edu/code/libraries/celio-speaker"
+  },
+  "publishConfig": {
+    "registry": "https://internal.cisl.rpi.edu/npm/"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@cisl/celio": "^3.0.4"
+  }
+}
