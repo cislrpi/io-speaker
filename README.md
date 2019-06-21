@@ -1,5 +1,14 @@
-@cisl/celio-speaker
+@cisl/io-speaker
 ===================
 
-Plugin for CelIO for interfacing with the speaker-worker
+Plugin for @cisl/io for interfacing with the speaker-worker
 
+Usage
+-----
+```
+import { registerPlugins, io } from '@cisl/io';
+import {registerSpeaker} from '@cisl/io-speaker';
+registerPlugins(registerSpeaker);
+
+io.speaker.speak("test");
+```
