@@ -1,12 +1,15 @@
 {
   "name": "@cisl/io-speaker",
-  "version": "0.5.0",
-  "description": "",
+  "version": "1.0.0-dev1",
+  "description": "Plugin for @cisl/io for interop with speaker-worker",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "lint": "eslint src/*",
+    "prepublishOnly": "echo \"Do not run publish directly, run tsc-publish\" && exit 1",
+    "tsc-publish": "tsc-publish"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -29,10 +32,14 @@
     "@cisl/io": "*"
   },
   "devDependencies": {
-    "@cisl/io": "file:../io",
-    "@typescript-eslint/eslint-plugin": "^1.9.0",
-    "@typescript-eslint/parser": "^1.9.0",
-    "eslint": "^5.16.0",
+    "@cisl/io": "^1.0.0-dev8",
+    "@typescript-eslint/eslint-plugin": "^2.3.2",
+    "@typescript-eslint/parser": "^2.3.2",
+    "eslint": "^6.5.1",
+    "tsc-publish": "^0.3.0",
     "typescript": "^3.5.1"
+  },
+  "dependencies": {
+    "@types/amqplib": "^0.5.13"
   }
 }
