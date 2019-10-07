@@ -1,22 +1,24 @@
-import { Io, RabbitMQ, FieldsAndProperties } from '@cisl/io';
+import { Io } from '@cisl/io/io';
+import amqplib from 'amqplib';
+import { Rabbit } from '@cisl/io/rabbitmq';
 
-declare module '@cisl/io' {
+declare module '@cisl/io/io' {
   interface Io {
     speaker: Speaker;
   }
 }
 
-type SpeakSubscriptionCallback = (content: any, headers: FieldsAndProperties) => void;
+type SpeakSubscriptionCallback = (content: any, message: amqplib.ConsumeMessage) => void;
 
 export class Speaker {
   public max_speaker_duration: number = 1000 * 20; // 20 seconds;
-  public mq: RabbitMQ;
+  public rabbit: Rabbit;
 
   public constructor(io: Io) {
-    if (!io.mq) {
+    if (!io.rabbit) {
       throw new Error('Must initialize RabbitMQ module for Io');
     }
-    this.mq = io.mq;
+    this.rabbit = io.rabbit;
   }
 
   /**
@@ -36,7 +38,7 @@ export class Speaker {
     }
     options.text = text;
 
-    return this.mq.callJson('rpc-speaker-speakText', options, { expiration: options.duration });
+    return this.rabbit.publishRpc('rpc-speaker-speakText', options, { expiration: options.duration });
   }
 
   /**
@@ -45,7 +47,7 @@ export class Speaker {
    * @returns {Promise} Resolves to "done".
    */
   public increaseVolume(change = 20): Promise<any> {
-    return this.mq.call('rpc-speaker-changeVolume', JSON.stringify({ change }));
+    return this.rabbit.publishRpc('rpc-speaker-changeVolume', JSON.stringify({ change }));
   }
 
   /**
@@ -54,7 +56,7 @@ export class Speaker {
    * @returns {Promise} Resolves to "done".
    */
   public reduceVolume(change = 20): Promise<any> {
-    return this.mq.call('rpc-speaker-changeVolume', JSON.stringify({ change: -change }));
+    return this.rabbit.publishRpc('rpc-speaker-changeVolume', JSON.stringify({ change: -change }));
   }
 
   /**
@@ -62,15 +64,7 @@ export class Speaker {
    * @returns {Promise} Resolves to "done".
    */
   public stop(): Promise<any> {
-    return this.mq.call('rpc-speaker-stop', '');
-  }
-
-  public beginSpeak(msg: string): void {
-    this.mq.publishTopic('begin.speak', JSON.stringify(msg));
-  }
-
-  public endSpeak(msg: string): void {
-    this.mq.publishTopic('end.speak', JSON.stringify(msg));
+    return this.rabbit.publishRpc('rpc-speaker-stop', '');
   }
 
   /**
@@ -78,8 +72,8 @@ export class Speaker {
    * @param  {speakSubscriptionCallback} handler - The callback for handling the speaking events.
    */
   public onBeginSpeak(handler: SpeakSubscriptionCallback): void {
-    this.mq.onTopicJson('begin.speak', (content, headers): void => {
-      handler(content, headers);
+    this.rabbit.onTopic('begin.speak', (response): void => {
+      handler(response.content, response.message);
     });
   }
 
@@ -88,8 +82,8 @@ export class Speaker {
    * @param  {speakSubscriptionCallback} handler - The callback for handling the speaking events.
    */
   public onEndSpeak(handler: SpeakSubscriptionCallback): void {
-    this.mq.onTopicJson('end.speak', (content, headers): void => {
-      handler(content, headers);
+    this.rabbit.onTopic('end.speak', (response): void => {
+      handler(response.content, response.message);
     });
   }
 }
