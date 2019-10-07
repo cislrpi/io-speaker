@@ -8,7 +8,12 @@ declare module '@cisl/io/io' {
   }
 }
 
-type SpeakSubscriptionCallback = (content: any, message: amqplib.ConsumeMessage) => void;
+interface Response {
+  content: Buffer | string | number | object;
+  message: amqplib.ConsumeMessage;
+}
+
+type SpeakSubscriptionCallback = (content: Buffer | string | number | object, message: amqplib.ConsumeMessage) => void;
 
 export class Speaker {
   public max_speaker_duration: number = 1000 * 20; // 20 seconds;
@@ -32,7 +37,7 @@ export class Speaker {
    * For a full list of voice you can use, check [Watson TTS website](http://www.ibm.com/watson/developercloud/doc/text-to-speech/http.shtml#voices).
    * @returns {Promise<Object>} Resolves to "succeeded" or "interrupted".
    */
-  public speak(text: string, options: any = {}): Promise<any> {
+  public speak(text: string, options: any = {}): Promise<Response> {
     if (!options.duration) {
       options.duration = this.max_speaker_duration;
     }
@@ -42,28 +47,41 @@ export class Speaker {
   }
 
   /**
-   * Increase speaker volume.
-   * @param  {number} [change=20] - The change amount. The full range of the volume is from 0 to 120.
-   * @returns {Promise} Resolves to "done".
+   * Clear the speaker-worker cache
    */
-  public increaseVolume(change = 20): Promise<any> {
-    return this.rabbit.publishRpc('rpc-speaker-changeVolume', JSON.stringify({ change }));
+  public clearCache(): void {
+    this.rabbit.publishTopic('speaker.command.cache.clear', '');
   }
 
   /**
-   * Reduce speaker volume.
-   * @param  {number} [change=20] - The change amount. The full range of the volume is from 0 to 120.
-   * @returns {Promise} Resolves to "done".
+   * Change the speaker volume by some percentage.
+   * @param {number} [change] - The change percentage amount.
    */
-  public reduceVolume(change = 20): Promise<any> {
-    return this.rabbit.publishRpc('rpc-speaker-changeVolume', JSON.stringify({ change: -change }));
+  public changeVolume(change: number): void {
+    this.rabbit.publishTopic('speaker.command.volume.change', { change });
+  }
+
+  /**
+   * Increase speaker volume by some percentage.
+   * @param  {number} [change=20] - The change percentage amount.
+   */
+  public increaseVolume(change = 20): void {
+    this.changeVolume(change);
+  }
+
+  /**
+   * Reduce speaker volume by some percentage.
+   * @param  {number} [change=20] - The change percentage amount.
+   */
+  public reduceVolume(change = 20): void {
+    this.changeVolume(-change);
   }
 
   /**
    * Stop the speaker.
-   * @returns {Promise} Resolves to "done".
+   * @returns {Promise} Resolves to content "done".
    */
-  public stop(): Promise<any> {
+  public stop(): Promise<Response> {
     return this.rabbit.publishRpc('rpc-speaker-stop', '');
   }
 
@@ -72,7 +90,7 @@ export class Speaker {
    * @param  {speakSubscriptionCallback} handler - The callback for handling the speaking events.
    */
   public onBeginSpeak(handler: SpeakSubscriptionCallback): void {
-    this.rabbit.onTopic('begin.speak', (response): void => {
+    this.rabbit.onTopic('speaker.speak.begin', (response): void => {
       handler(response.content, response.message);
     });
   }
@@ -82,7 +100,7 @@ export class Speaker {
    * @param  {speakSubscriptionCallback} handler - The callback for handling the speaking events.
    */
   public onEndSpeak(handler: SpeakSubscriptionCallback): void {
-    this.rabbit.onTopic('end.speak', (response): void => {
+    this.rabbit.onTopic('speaker.speak.end', (response): void => {
       handler(response.content, response.message);
     });
   }
