@@ -32,12 +32,12 @@
     "@cisl/io": "*"
   },
   "devDependencies": {
-    "@cisl/io": "^1.0.0-dev8",
-    "@typescript-eslint/eslint-plugin": "^2.3.2",
-    "@typescript-eslint/parser": "^2.3.2",
-    "eslint": "^6.5.1",
-    "tsc-publish": "^0.3.0",
-    "typescript": "^3.5.1"
+    "@cisl/io": "^1.0.0-dev.17",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "eslint": "^6.8.0",
+    "tsc-publish": "^0.5.2",
+    "typescript": "^3.9.3"
   },
   "dependencies": {
     "@types/amqplib": "^0.5.13"
