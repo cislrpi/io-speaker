@@ -12,7 +12,7 @@
     "tsc-publish": "tsc-publish"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8"
   },
   "contributors": [
     {
