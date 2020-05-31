@@ -79,6 +79,14 @@ export class Speaker {
     return this.rabbit.publishRpc('rpc-speaker-stop', '');
   }
 
+  public beginSpeak(msg: Record<string, unknown>): void {
+    this.rabbit.publishTopic('speaker.speak.begin', msg);
+  }
+
+  public endSpeak(msg: Record<string, unknown>): void {
+    this.rabbit.publishTopic('speaker.speak.end', msg);
+  }
+
   /**
    * Subscribe to begin-speak events.
    * @param  {speakSubscriptionCallback} handler - The callback for handling the speaking events.
