@@ -22,10 +22,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://internal.cisl.rpi.edu/code/libraries/celio-speaker"
+    "url": "https://github.com/cislrpi/io-speaker"
   },
   "publishConfig": {
-    "registry": "https://internal.cisl.rpi.edu/npm/"
+    "access": "public"
   },
   "license": "MIT",
   "peerDependencies": {
