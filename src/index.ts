@@ -11,7 +11,6 @@ declare module '@cisl/io/io' {
 type SpeakSubscriptionCallback = (message: RabbitMessage) => void;
 
 export class Speaker {
-  public max_speaker_duration: number = 1000 * 20; // 20 seconds;
   public rabbit: Rabbit;
 
   public constructor(io: Io) {
@@ -34,7 +33,8 @@ export class Speaker {
    */
   public speak(text: string, options: {duration?: number, voice?: string} = {}): Promise<RabbitMessage> {
     if (!options.duration) {
-      options.duration = this.max_speaker_duration;
+      // We assume a minimum of 500 milliseconds taken per word, with an added buffer of 4 seconds. This seems to work well from empirical tests.
+      options.duration = (Math.max((text.match(/[ ]+/g)||[]).length * 500, 20 * 1000) + 4000);
     }
 
     return this.rabbit.publishRpc('rpc-speaker-speakText', Object.assign({}, options, {text}), { expiration: options.duration });
