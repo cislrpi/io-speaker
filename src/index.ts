@@ -1,5 +1,6 @@
+import cislio from '@cisl/io';
 import { Io } from '@cisl/io/io';
-import Rabbit from '@cisl/io/rabbitmq';
+import Rabbit from '@cisl/io/rabbit';
 import { RabbitMessage } from '@cisl/io/types';
 
 declare module '@cisl/io/io' {
@@ -25,7 +26,7 @@ export class Speaker {
    * @param  {string} text - The text to speak out.
    * You can also use SSML. See [Watson TTS website](http://www.ibm.com/watson/developercloud/doc/text-to-speech/http.shtml#input).
    * @param  {Object} [options] - Speak options.
-   * @param  {number} [options.duration=20000] - The max non-stop speak duration. Defaults to 20 seconds.
+   * @param  {number} [options.duration] - The max non-stop speak duration. Defaults to (20s or 500ms per word (whichever is greater)) + 4 seconds.
    * @param  {string} [options.voice] - The voice to use. The default depends on the setting of speaker-worker.
    * For English (US), there are en-US_AllisonVoice, en-US_LisaVoice, and en-US_MichaelVoice.
    * For a full list of voice you can use, check [Watson TTS website](http://www.ibm.com/watson/developercloud/doc/text-to-speech/http.shtml#voices).
@@ -111,3 +112,5 @@ export class Speaker {
 export function registerSpeaker(io: Io): void {
   io.speaker = new Speaker(io);
 }
+
+cislio.registerPlugins(registerSpeaker);

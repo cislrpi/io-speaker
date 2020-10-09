@@ -29,10 +29,10 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@cisl/io": ">= 1.0.0-dev.18"
+    "@cisl/io": ">= 1.0.0-dev.19"
   },
   "devDependencies": {
-    "@cisl/io": "^1.0.0-dev.18",
+    "@cisl/io": "^1.0.0-dev.19",
     "@masterodin/eslint-config-typescript": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",
