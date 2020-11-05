@@ -1,6 +1,6 @@
 {
   "name": "@cisl/io-speaker",
-  "version": "1.0.0-dev.4",
+  "version": "1.0.0",
   "description": "Plugin for @cisl/io for interop with speaker-worker",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,10 +29,10 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@cisl/io": ">= 1.0.0-dev.19"
+    "@cisl/io": ">= 1.0.0"
   },
   "devDependencies": {
-    "@cisl/io": "^1.0.0-dev.19",
+    "@cisl/io": "^1.0.0",
     "@masterodin/eslint-config-typescript": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",

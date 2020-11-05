@@ -1,5 +1,8 @@
-Changelog
-=========
+# Changelog
+
+## v1.0.0 
+
+* Initial full release
 
 ## v1.0.0-dev.4
 
