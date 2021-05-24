@@ -1,5 +1,3 @@
-__NOTE__: This repo was moved into the monorepo in [@cisl/io](https://github.com/cislrpi/io).
-
 # @cisl/io-speaker
 
 Plugin for @cisl/io for interfacing with the speaker-worker
