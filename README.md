@@ -1,3 +1,5 @@
+__Note__: This repo has been merged into larger the [`@cisl/io`](https://github.com/cislrpi/io) monorepo.
+
 # @cisl/io-speaker
 
 Plugin for @cisl/io for interfacing with the speaker-worker
